@@ -45,6 +45,32 @@
     .ball { width: 118px; height: 118px; border-radius: 50%; display: grid; place-items: center; color: #08111d; font-size: 37px; font-weight: 950; background: radial-gradient(circle at 32% 24%, #ffe79a, var(--gold) 48%, #d6810b 100%); box-shadow: 0 0 40px #ffc92855, inset -9px -12px 18px #8a4e1f44; transform: rotate(-10deg); animation: float 3.2s ease-in-out infinite; }
     .ball span { transform: rotate(10deg); }
     .art-word { position: absolute; bottom: 8px; color: #ffffff23; font-size: clamp(34px, 10vw, 58px); letter-spacing: -.07em; font-weight: 950; text-transform: uppercase; white-space: nowrap; }
+    .art { height: 278px; margin: 20px 0 12px; perspective: 900px; overflow: visible; }
+    .medal-wrap { position: relative; width: 226px; height: 226px; transform-style: preserve-3d; }
+    .medal-wrap.spin { animation: medalSpin 1.45s cubic-bezier(.18,.74,.2,1) both; }
+    .medal-face { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; border-radius: 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .medal-front { color: #101521; background: radial-gradient(circle at 34% 25%, #fff5bc 0, #ffe574 12%, #f5b91c 45%, #ab6610 78%, #ffdf6e 100%); border: 2px solid #ffe68a; box-shadow: inset 0 0 0 5px #9c650a, inset 0 0 0 8px #fff0a2, 0 12px 35px #0008, 0 0 38px #ffc92855; }
+    .medal-rim, .medal-inner { position: absolute; inset: 12px; border: 1px solid #fff1aa99; border-radius: 50%; pointer-events: none; }
+    .medal-inner { inset: 22px; border-style: dashed; opacity: .6; }
+    .gif-fallback { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 18px; font-weight: 950; letter-spacing: .04em; text-transform: uppercase; text-shadow: 0 1px #fff8; }
+    .mini-ball { width: 76px; height: 76px; display: grid; place-items: center; border: 2px solid #4b2c12; border-radius: 50%; color: #301809; font-size: 26px; background: radial-gradient(circle at 32% 24%, #ffe6a6, #dc7621 62%, #8f3d0c); box-shadow: inset 0 0 0 2px #f9bb48; }
+    .moment-gif { display: none; position: absolute; inset: 24px; z-index: 1; width: calc(100% - 48px); height: calc(100% - 48px); object-fit: cover; border-radius: 50%; border: 3px solid #fff2b5; box-shadow: 0 0 24px #fff7; }
+    .medal-front.has-gif .moment-gif { display: block; }
+    .medal-front.has-gif .gif-fallback { display: none; }
+    .medal-star { position: absolute; z-index: 2; color: #fffbd2; text-shadow: 0 0 12px #fff, 0 0 24px #fff7b1; animation: twinkle 1.2s ease-in-out infinite alternate; pointer-events: none; }
+    .star-one { top: 32px; right: 53px; font-size: 20px; }
+    .star-two { bottom: 48px; left: 39px; font-size: 16px; animation-delay: .35s; }
+    .star-three { top: 74px; left: 35px; font-size: 12px; animation-delay: .7s; }
+    .medal-front::after { content: ""; position: absolute; z-index: 3; inset: -40% auto -40% -70%; width: 38%; transform: skewX(-22deg); background: linear-gradient(90deg, transparent, #fff9, #fff2, transparent); animation: medalShine 3.2s ease-in-out infinite; pointer-events: none; }
+    .medal-back { transform: rotateY(180deg); padding: 34px; gap: 5px; text-align: center; color: #f7f2dc; background: radial-gradient(circle at 50% 42%, #1d3b60, #0a1728 72%); border: 2px solid #f3c958; box-shadow: inset 0 0 0 5px #122b47, inset 0 0 0 8px #b28b35, 0 12px 35px #0008; }
+    .medal-back-rim { position: absolute; inset: 13px; border: 1px solid #e8c76a99; border-radius: 50%; }
+    .back-kicker, .back-stamp { font-size: 8px; letter-spacing: .16em; color: #f6cf5b; font-weight: 850; }
+    .medal-back strong { font-size: 16px; line-height: 1.05; letter-spacing: .06em; text-transform: uppercase; }
+    .back-number { color: #ffce38; font-size: 62px; font-weight: 950; line-height: .95; text-shadow: 0 0 24px #ffce3844; }
+    .back-sub { max-width: 140px; font-size: 9px; line-height: 1.3; color: #d7e2f2; letter-spacing: .08em; }
+    @keyframes medalSpin { from { transform: rotateY(0) rotateZ(-8deg); } 45% { transform: rotateY(180deg) rotateZ(7deg); } to { transform: rotateY(360deg) rotateZ(0); } }
+    @keyframes medalShine { 0%, 15% { left: -70%; } 60%, 100% { left: 140%; } }
+    @keyframes twinkle { from { opacity: .35; transform: scale(.72) rotate(0); } to { opacity: 1; transform: scale(1.25) rotate(35deg); } }
     .headline { text-align: center; margin: 4px 0 8px; font-size: clamp(27px, 8vw, 38px); line-height: 1.02; letter-spacing: -.045em; text-transform: uppercase; }
     .subhead { min-height: 24px; text-align: center; color: var(--gold); font-weight: 800; letter-spacing: .06em; font-size: 12px; text-transform: uppercase; }
     .detail { color: var(--muted); text-align: center; font-size: 13px; line-height: 1.55; margin: 8px auto 18px; max-width: 300px; }
@@ -63,8 +89,8 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes float { 50% { transform: translateY(-8px) rotate(-3deg); } }
     @keyframes reveal { from { opacity: .55; transform: scale(.97) rotateX(5deg); } to { opacity: 1; transform: scale(1) rotateX(0); } }
-    @media (max-width: 420px) { .card { min-height: min(590px, calc(100svh - 100px)); padding: 18px; } .art { height: 235px; margin: 20px 0 14px; } .orbit { width: 190px; height: 190px; } .orbit.two { width: 150px; height: 150px; } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+    @media (max-width: 420px) { .card { min-height: min(590px, calc(100svh - 100px)); padding: 18px; } .art { height: 250px; margin: 16px 0 8px; } .medal-wrap { width: 208px; height: 208px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } .medal-wrap.spin { animation: none !important; } }
   </style>
 </head>
 <body>
@@ -72,7 +98,24 @@
     <div class="brand"><span class="brand-mark">30</span> CURRY MOMENT</div>
     <section class="card" id="card" aria-live="polite" aria-atomic="true">
       <div class="topline"><span id="cardNumber">TAP TO UNLOCK</span><span class="badge" id="rarity">MOMENT CARD</span></div>
-      <div class="art" aria-hidden="true"><div class="orbit"></div><div class="orbit two"></div><div class="ball"><span>30</span></div><div class="art-word" id="artWord">CHEF CURRY</div></div>
+      <div class="art" aria-label="Rotating Curry badge">
+        <div class="medal-wrap" id="medal">
+          <div class="medal-face medal-front">
+            <div class="medal-rim"></div><div class="medal-inner"></div>
+            <div class="gif-fallback" id="gifFallback"><span class="mini-ball">30</span><span id="artWord">CHEF CURRY</span></div>
+            <img class="moment-gif" id="momentGif" alt="Curry highlight animation">
+            <span class="medal-star star-one">✦</span><span class="medal-star star-two">✧</span><span class="medal-star star-three">✦</span>
+          </div>
+          <div class="medal-face medal-back">
+            <div class="medal-back-rim"></div>
+            <span class="back-kicker">CURRY MOMENT · ONE OF ONE</span>
+            <strong id="backTitle">STEPH CURRY</strong>
+            <span class="back-number" id="backWord">30</span>
+            <span class="back-sub" id="backSub">A LITTLE CURRY MAGIC</span>
+            <span class="back-stamp">TROY × CURRY</span>
+          </div>
+        </div>
+      </div>
       <h1 class="headline" id="headline">Every tap<br>is a new moment.</h1>
       <div class="subhead" id="subhead">A little Curry magic</div>
       <p class="detail" id="detail">Tap below to draw a card from the moment deck. No repeats until the deck resets.</p>
@@ -97,6 +140,7 @@
       { title: "CHEF'S KISS", sub: "ONE MORE FOR THE ROAD", detail: "A late-clock three, the turn, the grin. Nothing but net.", rarity: "COMMON", word: "CHEF'S KISS", level: 1 }
     ];
     const card = document.getElementById("card");
+    const medal = document.getElementById("medal");
     const keys = ["curry-moment-seen-v1"];
     function getSeen() {
       try { return JSON.parse(localStorage.getItem(keys[0]) || "[]"); } catch (_) { return []; }
@@ -130,6 +174,16 @@
       document.getElementById("subhead").textContent = item.sub;
       document.getElementById("detail").textContent = item.detail;
       document.getElementById("artWord").textContent = item.word;
+      document.getElementById("backTitle").textContent = item.title;
+      document.getElementById("backWord").textContent = item.word;
+      document.getElementById("backSub").textContent = item.sub;
+      const gif = document.getElementById("momentGif");
+      const medalFront = document.querySelector(".medal-front");
+      if (item.gifUrl) { gif.src = item.gifUrl; medalFront.classList.add("has-gif"); }
+      else { gif.removeAttribute("src"); medalFront.classList.remove("has-gif"); }
+      medal.classList.remove("spin");
+      void medal.offsetWidth;
+      medal.classList.add("spin");
       card.classList.add("reveal");
       document.getElementById("draw").textContent = "🔥  Another one";
     }
