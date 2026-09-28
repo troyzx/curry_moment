@@ -69,7 +69,6 @@
     .medal-back strong { font-size: 16px; line-height: 1.05; letter-spacing: .06em; text-transform: uppercase; }
     .back-number { color: #ffce38; font-size: 62px; font-weight: 950; line-height: .95; text-shadow: 0 0 24px #ffce3844; }
     .back-sub { max-width: 140px; font-size: 9px; line-height: 1.3; color: #d7e2f2; letter-spacing: .08em; }
-    @keyframes medalAutoSpin { from { transform: rotateY(var(--spin-from, 0deg)); } to { transform: rotateY(var(--spin-to, 360deg)); } }
     @keyframes medalShine { 0%, 15% { left: -70%; } 60%, 100% { left: 140%; } }
     @keyframes twinkle { from { opacity: .35; transform: scale(.72) rotate(0); } to { opacity: 1; transform: scale(1.25) rotate(35deg); } }
     .headline { text-align: center; margin: 4px 0 8px; font-size: clamp(27px, 8vw, 38px); line-height: 1.02; letter-spacing: -.045em; text-transform: uppercase; }
@@ -142,16 +141,46 @@
     ];
     const card = document.getElementById("card");
     const medal = document.getElementById("medal");
-    let medalRotation = 0;
+    let orientation = [0, 0, 0, 1];
     let autoFrame = null;
     let inertiaFrame = null;
     let dragging = false;
-    let lastX = 0;
+    let previousPoint = null;
     let lastTime = 0;
     let angularVelocity = 0;
-    function setMedalRotation(degrees) {
-      medalRotation = degrees;
-      medal.style.transform = "rotateY(" + degrees + "deg)";
+    let spinAxis = [0, 1, 0];
+    function normalizeQuaternion(q) {
+      const length = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+      return q.map(value => value / length);
+    }
+    function multiplyQuaternion(a, b) {
+      const [ax, ay, az, aw] = a;
+      const [bx, by, bz, bw] = b;
+      return normalizeQuaternion([
+        aw * bx + ax * bw + ay * bz - az * by,
+        aw * by - ax * bz + ay * bw + az * bx,
+        aw * bz + ax * by - ay * bx + az * bw,
+        aw * bw - ax * bx - ay * by - az * bz
+      ]);
+    }
+    function axisAngle(axis, angle) {
+      const half = angle / 2;
+      const sine = Math.sin(half);
+      return [axis[0] * sine, axis[1] * sine, axis[2] * sine, Math.cos(half)];
+    }
+    function setMedalOrientation(q) {
+      orientation = normalizeQuaternion(q);
+      const [x, y, z, w] = orientation;
+      const xx = x * x, yy = y * y, zz = z * z;
+      const xy = x * y, xz = x * z, yz = y * z;
+      const wx = w * x, wy = w * y, wz = w * z;
+      const matrix = [
+        1 - 2 * (yy + zz), 2 * (xy + wz), 2 * (xz - wy), 0,
+        2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz + wx), 0,
+        2 * (xz + wy), 2 * (yz - wx), 1 - 2 * (xx + yy), 0,
+        0, 0, 0, 1
+      ];
+      medal.style.transform = "matrix3d(" + matrix.join(",") + ")";
     }
     function stopMedalMotion() {
       if (autoFrame !== null) cancelAnimationFrame(autoFrame);
@@ -162,7 +191,7 @@
     function spinMedalOnce() {
       if (inertiaFrame !== null) cancelAnimationFrame(inertiaFrame);
       inertiaFrame = null;
-      const start = medalRotation;
+      const startOrientation = orientation.slice();
       const startedAt = performance.now();
       const duration = 1450;
       function frame(now) {
@@ -170,23 +199,43 @@
         const eased = progress < .5
           ? 4 * progress * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-        setMedalRotation(start + 360 * eased);
+        const turn = axisAngle([0, 1, 0], Math.PI * 2 * eased);
+        setMedalOrientation(multiplyQuaternion(turn, startOrientation));
         if (progress < 1) autoFrame = requestAnimationFrame(frame);
         else {
-          setMedalRotation(start + 360);
+          setMedalOrientation(startOrientation);
           autoFrame = null;
         }
       }
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        setMedalRotation(start + 360);
-      } else {
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         autoFrame = requestAnimationFrame(frame);
       }
+    }
+    function trackballPoint(event) {
+      const rect = medal.getBoundingClientRect();
+      const radius = Math.min(rect.width, rect.height) / 2;
+      const x = (event.clientX - (rect.left + rect.width / 2)) / radius;
+      const y = ((rect.top + rect.height / 2) - event.clientY) / radius;
+      const distance = Math.hypot(x, y);
+      const z = distance < Math.SQRT1_2
+        ? Math.sqrt(1 - distance * distance)
+        : .5 / Math.max(distance, .0001);
+      const length = Math.hypot(x, y, z);
+      return [x / length, y / length, z / length];
+    }
+    function rotationBetween(a, b) {
+      const cross = [
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0]
+      ];
+      const dot = Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
+      return normalizeQuaternion([cross[0], cross[1], cross[2], 1 + dot]);
     }
     medal.addEventListener("pointerdown", event => {
       stopMedalMotion();
       dragging = true;
-      lastX = event.clientX;
+      previousPoint = trackballPoint(event);
       lastTime = performance.now();
       angularVelocity = 0;
       medal.setPointerCapture(event.pointerId);
@@ -195,11 +244,16 @@
     medal.addEventListener("pointermove", event => {
       if (!dragging) return;
       const now = performance.now();
-      const deltaX = event.clientX - lastX;
-      const deltaTime = Math.max(1, now - lastTime);
-      setMedalRotation(medalRotation + deltaX * .9);
-      angularVelocity = deltaX / deltaTime * 1000 * .9;
-      lastX = event.clientX;
+      const point = trackballPoint(event);
+      const delta = rotationBetween(previousPoint, point);
+      const angle = 2 * Math.acos(Math.max(-1, Math.min(1, delta[3])));
+      const axisLength = Math.hypot(delta[0], delta[1], delta[2]);
+      if (axisLength > .00001 && angle > .0001) {
+        spinAxis = [delta[0] / axisLength, delta[1] / axisLength, delta[2] / axisLength];
+        angularVelocity = angle / Math.max(1, now - lastTime) * 1000;
+        setMedalOrientation(multiplyQuaternion(delta, orientation));
+      }
+      previousPoint = point;
       lastTime = now;
     });
     function releaseMedal() {
@@ -209,12 +263,13 @@
       function coast(now) {
         const deltaTime = Math.min(40, now - previousTime);
         previousTime = now;
-        setMedalRotation(medalRotation + angularVelocity * deltaTime / 1000);
+        const step = axisAngle(spinAxis, angularVelocity * deltaTime / 1000);
+        setMedalOrientation(multiplyQuaternion(step, orientation));
         angularVelocity *= Math.pow(.94, deltaTime / 16.67);
-        if (Math.abs(angularVelocity) > 12) inertiaFrame = requestAnimationFrame(coast);
+        if (Math.abs(angularVelocity) > .08) inertiaFrame = requestAnimationFrame(coast);
         else { angularVelocity = 0; inertiaFrame = null; }
       }
-      if (Math.abs(angularVelocity) > 12) inertiaFrame = requestAnimationFrame(coast);
+      if (Math.abs(angularVelocity) > .08) inertiaFrame = requestAnimationFrame(coast);
     }
     medal.addEventListener("pointerup", releaseMedal);
     medal.addEventListener("pointercancel", releaseMedal);
