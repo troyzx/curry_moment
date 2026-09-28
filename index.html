@@ -23,11 +23,17 @@
       background: radial-gradient(ellipse at 50% 5%, #17345b 0, var(--navy) 48%, #03070d 100%);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    .shell { width: min(100%, 460px); }
-    .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; letter-spacing: .24em; font-weight: 850; font-size: 12px; color: #dbe6f7; }
+    .shell { width: min(100%, 460px); height: min(850px, calc(100svh - 56px)); min-height: 500px; display: flex; flex-direction: column; }
+    .flip-card { position: relative; flex: 1; min-height: 0; perspective: 1400px; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .82s cubic-bezier(.2,.72,.2,1); }
+    .flip-card.is-flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-face { position: absolute; inset: 0; min-height: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .card.flip-face { transform: translateZ(1px); }
+    .highlight-panel.flip-face { transform: rotateY(180deg) translateZ(1px); }
+    .brand { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; letter-spacing: .24em; font-weight: 850; font-size: 12px; color: #dbe6f7; }
     .brand-mark { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #ffffff55; border-radius: 50%; color: var(--gold); font-size: 12px; letter-spacing: 0; }
     .card {
-      position: relative; isolation: isolate; overflow: hidden; min-height: 590px;
+      position: relative; isolation: isolate; overflow: hidden; min-height: 0; height: 100%;
       display: flex; flex-direction: column; padding: 22px;
       border: 1px solid #ffffff20; border-radius: 26px;
       background: linear-gradient(155deg, #142643 0%, #0b1525 58%, #101a2a 100%);
@@ -75,26 +81,30 @@
     .detail { color: var(--muted); text-align: center; font-size: 13px; line-height: 1.55; margin: 8px auto 18px; max-width: 300px; }
     .spacer { flex: 1; }
     button { font: inherit; }
-    .draw { width: 100%; min-height: 54px; border: 0; border-radius: 15px; background: var(--gold); color: #15130d; font-weight: 900; font-size: 15px; letter-spacing: .015em; cursor: pointer; box-shadow: 0 8px 26px #ffc92825; transition: transform .16s ease, filter .16s ease; }
+    .card-actions { display: flex; flex: 0 0 auto; gap: 9px; }
+    .flip-toggle { flex: 0 0 auto; min-width: 112px; min-height: 54px; padding: 0 14px; border: 1px solid #ffffff30; border-radius: 15px; color: #eef3fb; background: #ffffff0a; font-weight: 800; font-size: 13px; cursor: pointer; }
+    .flip-toggle:hover { background: #ffffff15; }
+    .flip-toggle:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+    .draw { flex: 1; width: auto; min-height: 54px; border: 0; border-radius: 15px; background: var(--gold); color: #15130d; font-weight: 900; font-size: 15px; letter-spacing: .015em; cursor: pointer; box-shadow: 0 8px 26px #ffc92825; transition: transform .16s ease, filter .16s ease; }
     .draw:hover { filter: brightness(1.08); transform: translateY(-2px); }
     .draw:active { transform: scale(.985); }
     .draw:focus-visible { outline: 3px solid white; outline-offset: 3px; }
-    .highlight-panel { margin-top: 14px; padding: 17px; border: 1px solid #ffffff1b; border-radius: 22px; background: linear-gradient(145deg, #111e32, #09111e); box-shadow: 0 16px 45px #0005, inset 0 1px #ffffff0d; }
+    .highlight-panel { display: flex; flex-direction: column; min-height: 0; margin: 0; padding: 18px; border: 1px solid #ffffff1b; border-radius: 22px; background: linear-gradient(145deg, #111e32, #09111e); box-shadow: 0 16px 45px #0005, inset 0 1px #ffffff0d; }
     .highlight-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
     .highlight-kicker { color: #8795ab; font-size: 9px; font-weight: 800; letter-spacing: .2em; }
     .highlight-heading h2 { margin: 4px 0 0; color: #f2f5fa; font-size: 16px; letter-spacing: -.02em; }
     .gif-credit { display: inline-block; margin: -4px 0 12px; color: #92a2bb; font-size: 10px; text-decoration: none; }
     .gif-credit:hover { color: #fff; text-decoration: underline; }
     .play-badge { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--gold); background: #ffc92816; border: 1px solid #ffc92850; font-size: 11px; padding-left: 2px; }
-    .media-stage { position: relative; display: grid; place-items: center; overflow: hidden; min-height: 210px; border: 1px solid #ffffff14; border-radius: 15px; background: radial-gradient(ellipse at 50% 40%, #1c3150, #08111d 72%); }
+    .media-stage { position: relative; flex: 1; display: grid; place-items: center; overflow: hidden; min-height: 0; border: 1px solid #ffffff14; border-radius: 15px; background: radial-gradient(ellipse at 50% 40%, #1c3150, #08111d 72%); }
     .media-empty { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 24px; color: #a8b3c5; text-align: center; }
     .media-play { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid #ffc92866; border-radius: 50%; color: var(--gold); background: #ffc92814; padding-left: 3px; }
     .media-empty strong { color: #e9edf5; font-size: 11px; letter-spacing: .18em; }
     .media-empty span:last-child { max-width: 245px; font-size: 11px; line-height: 1.45; }
-    .highlight-gif { display: none; width: 100%; max-height: 440px; aspect-ratio: 16/9; object-fit: cover; }
+    .highlight-gif { display: none; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; object-fit: contain; }
     .media-stage.has-gif .highlight-gif { display: block; }
     .media-stage.has-gif .media-empty { display: none; }
-    .footer { text-align: center; color: #718097; font-size: 10px; letter-spacing: .16em; margin-top: 17px; text-transform: uppercase; }
+    .footer { flex: 0 0 auto; text-align: center; color: #718097; font-size: 10px; letter-spacing: .16em; margin-top: 9px; text-transform: uppercase; }
     .card.reveal { animation: reveal .48s cubic-bezier(.2,.8,.2,1); }
     .card.rarity-common { --metal-glint: #fff; --metal-bright: #edf4f5; --metal-main: #b8c5ca; --metal-mid: #71818a; --metal-deep: #343f48; --metal-rim: #d0dade; --metal-edge: #edf4f5; --metal-glow: #d9eff355; --glow: #aabec9; }
     .card.rarity-rare { --metal-glint: #edfffb; --metal-bright: #c2f5ef; --metal-main: #62c9c0; --metal-mid: #278b93; --metal-deep: #154957; --metal-rim: #a3f0e6; --metal-edge: #d6fffa; --metal-glow: #63e4d855; --glow: #33c7c1; }
@@ -107,52 +117,88 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes float { 50% { transform: translateY(-8px) rotate(-3deg); } }
     @keyframes reveal { from { opacity: .55; transform: scale(.97) rotateX(5deg); } to { opacity: 1; transform: scale(1) rotateX(0); } }
-    @media (max-width: 420px) { .card { min-height: min(590px, calc(100svh - 100px)); padding: 18px; } .art { height: 250px; margin: 16px 0 8px; } .medal-wrap { width: 208px; height: 208px; } .media-stage { min-height: 180px; } }
+    @media (max-width: 600px) {
+      body { height: 100svh; min-height: 100svh; overflow: hidden; padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom)); }
+      .shell { width: min(100%, 480px); height: 100%; min-height: 0; }
+      .brand { gap: 8px; margin-bottom: 8px; font-size: 10px; }
+      .brand-mark { width: 24px; height: 24px; }
+      .footer { margin-top: 7px; font-size: 8px; }
+      .card { padding: 15px; border-radius: 22px; }
+      .topline { font-size: 9px; }
+      .art { flex: 1; width: 100%; height: auto; min-height: 150px; max-height: 250px; margin: 6px 0 7px; }
+      .medal-wrap { width: min(54vw, 204px); height: min(54vw, 204px); }
+      .headline { margin: 2px 0 6px; font-size: clamp(24px, 7vw, 32px); }
+      .subhead { min-height: 18px; font-size: 10px; }
+      .detail { margin: 6px auto 9px; font-size: 11px; line-height: 1.4; max-width: 290px; }
+      .draw, .flip-toggle { min-height: 46px; border-radius: 13px; }
+      .flip-toggle { min-width: 96px; padding: 0 10px; font-size: 12px; }
+      .highlight-panel { padding: 14px; border-radius: 22px; }
+      .highlight-heading { margin-bottom: 8px; }
+      .highlight-heading h2 { font-size: 15px; }
+      .gif-credit { margin: 0 0 8px; }
+      .media-stage { width: 100%; }
+      .back-toggle { margin-top: 10px; }
+    }
+    @media (max-height: 700px) and (max-width: 600px) {
+      .art { min-height: 126px; max-height: 190px; }
+      .medal-wrap { width: min(46vw, 176px); height: min(46vw, 176px); }
+      .card { padding: 12px; }
+      .detail { margin: 4px auto 6px; font-size: 10px; }
+      .headline { font-size: clamp(22px, 6vw, 28px); }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
   </style>
 </head>
 <body>
   <main class="shell">
     <div class="brand"><span class="brand-mark">30</span> CURRY MOMENT</div>
-    <section class="card" id="card" aria-live="polite" aria-atomic="true">
-      <div class="topline"><span id="cardNumber">TAP TO UNLOCK</span><span class="badge" id="rarity">MOMENT CARD</span></div>
-      <div class="art" aria-label="Rotating Curry badge">
-        <div class="medal-wrap" id="medal">
-          <div class="medal-face medal-front">
-            <div class="medal-rim"></div><div class="medal-inner"></div>
-            <div class="gif-fallback"><span class="badge-emblem" id="badgeEmblem">✹</span><span id="artWord">CHEF CURRY</span></div>
-            <span class="medal-star star-one">✦</span><span class="medal-star star-two">✧</span><span class="medal-star star-three">✦</span>
-          </div>
-          <div class="medal-face medal-back">
-            <div class="medal-back-rim"></div>
-            <span class="back-kicker">CURRY MOMENT</span>
-            <span class="back-number">30</span>
-            <strong id="backKeyword">CHEF CURRY</strong>
-            <span class="back-stamp">TROY × CURRY</span>
+    <div class="flip-card" id="flipCard">
+      <div class="flip-card-inner">
+      <section class="card flip-face" id="card" aria-live="polite" aria-atomic="true">
+        <div class="topline"><span id="cardNumber">TAP TO UNLOCK</span><span class="badge" id="rarity">MOMENT CARD</span></div>
+        <div class="art" aria-label="Rotating Curry badge">
+          <div class="medal-wrap" id="medal">
+            <div class="medal-face medal-front">
+              <div class="medal-rim"></div><div class="medal-inner"></div>
+              <div class="gif-fallback"><span class="badge-emblem" id="badgeEmblem">✹</span><span id="artWord">CHEF CURRY</span></div>
+              <span class="medal-star star-one">✦</span><span class="medal-star star-two">✧</span><span class="medal-star star-three">✦</span>
+            </div>
+            <div class="medal-face medal-back">
+              <div class="medal-back-rim"></div>
+              <span class="back-kicker">CURRY MOMENT</span>
+              <span class="back-number">30</span>
+              <strong id="backKeyword">CHEF CURRY</strong>
+              <span class="back-stamp">TROY × CURRY</span>
+            </div>
           </div>
         </div>
-      </div>
-      <h1 class="headline" id="headline">Every tap<br>is a new moment.</h1>
-      <div class="subhead" id="subhead">A little Curry magic</div>
-      <p class="detail" id="detail">Tap below to draw a card from the moment deck. No repeats until the deck resets.</p>
-      <div class="spacer"></div>
-      <button class="draw" id="draw" type="button">🔥 &nbsp; Draw a moment</button>
-    </section>
-    <section class="highlight-panel" aria-live="polite" aria-label="Curry highlight">
-      <div class="highlight-heading">
-        <div><span class="highlight-kicker">THE HIGHLIGHT</span><h2 id="mediaTitle">A moment, on replay</h2></div>
-        <span class="play-badge" aria-hidden="true">▶</span>
-      </div>
-      <a class="gif-credit" id="gifCredit" target="_blank" rel="noopener noreferrer">GIF source</a>
-      <div class="media-stage" id="mediaStage">
-        <div class="media-empty" id="mediaEmpty">
-          <span class="media-play">▶</span>
-          <strong>GIF GOES HERE</strong>
-          <span id="mediaHint">Add a GIF URL to a moment to show it here.</span>
+        <h1 class="headline" id="headline">Every tap<br>is a new moment.</h1>
+        <div class="subhead" id="subhead">A little Curry magic</div>
+        <p class="detail" id="detail">Tap below to draw a card from the moment deck. No repeats until the deck resets.</p>
+        <div class="spacer"></div>
+        <div class="card-actions">
+          <button class="flip-toggle" id="flipToGif" type="button" aria-label="Show the highlight GIF">View GIF</button>
+          <button class="draw" id="draw" type="button">🔥 &nbsp; Draw a moment</button>
         </div>
-        <img class="highlight-gif" id="momentGif" alt="Curry highlight GIF">
+      </section>
+      <section class="highlight-panel flip-face" aria-live="polite" aria-label="Curry highlight">
+        <div class="highlight-heading">
+          <div><span class="highlight-kicker">THE HIGHLIGHT</span><h2 id="mediaTitle">A moment, on replay</h2></div>
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </div>
+        <a class="gif-credit" id="gifCredit" target="_blank" rel="noopener noreferrer">GIF source</a>
+        <div class="media-stage" id="mediaStage">
+          <div class="media-empty" id="mediaEmpty">
+            <span class="media-play">▶</span>
+            <strong>GIF GOES HERE</strong>
+            <span id="mediaHint">Add a GIF URL to a moment to show it here.</span>
+          </div>
+          <img class="highlight-gif" id="momentGif" alt="Curry highlight GIF">
+        </div>
+        <button class="flip-toggle back-toggle" id="flipToBadge" type="button" aria-label="Return to the badge">← &nbsp; Badge front</button>
+      </section>
       </div>
-    </section>
+    </div>
     <div class="footer">TROY × CURRY &nbsp;·&nbsp; ONE TAP, ONE MOMENT</div>
   </main>
   <script>
@@ -171,6 +217,11 @@
       { title: "CHEF'S KISS", sub: "ONE MORE FOR THE ROAD", detail: "A late-clock three, the turn, the grin. Nothing but net.", rarity: "COMMON", word: "CHEF'S KISS", emblem: "♨", accent: "#ffe6cf", level: 1, gifUrl: "https://media.giphy.com/media/rO9pVedVmBnwlNEKoa/giphy.gif", gifPage: "https://giphy.com/gifs/nba-steph-curry-chef-rO9pVedVmBnwlNEKoa", gifBy: "NBA · GIPHY" }
     ];
     const card = document.getElementById("card");
+    const flipCard = document.getElementById("flipCard");
+    const flipToGif = document.getElementById("flipToGif");
+    const flipToBadge = document.getElementById("flipToBadge");
+    flipToGif.addEventListener("click", () => flipCard.classList.add("is-flipped"));
+    flipToBadge.addEventListener("click", () => flipCard.classList.remove("is-flipped"));
     const medal = document.getElementById("medal");
     let medalRotation = 0;
     let autoFrame = null;
@@ -275,6 +326,7 @@
     function saveSeen(value) { try { localStorage.setItem(keys[0], JSON.stringify(value)); } catch (_) {} }
     let lastIndex = -1;
     function draw() {
+      flipCard.classList.remove("is-flipped");
       card.classList.remove("legendary", "friendship", "reveal", "rarity-common", "rarity-rare", "rarity-epic", "rarity-legendary", "rarity-secret");
       void card.offsetWidth;
       const seen = getSeen();
