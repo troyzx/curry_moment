@@ -54,7 +54,8 @@
     .medal-front { color: #101521; background: radial-gradient(circle at var(--light-x, 34%) var(--light-y, 25%), var(--metal-glint) 0, var(--metal-bright) 7%, var(--metal-main) 20%, var(--metal-mid) 38%, var(--metal-deep) 58%, var(--metal-rim) 74%, var(--metal-main) 88%, var(--metal-glint) 100%); border: 2px solid var(--metal-edge); box-shadow: inset 0 0 0 5px var(--metal-deep), inset 0 0 0 8px var(--metal-glint), inset 0 0 18px 10px #0007, 0 12px 35px #0008, 0 0 38px var(--metal-glow); }
     .medal-rim, .medal-inner { position: absolute; inset: 12px; border: 1px solid #fff1aa99; border-radius: 50%; pointer-events: none; }
     .medal-inner { inset: 22px; border-style: dashed; opacity: .6; box-shadow: 0 0 7px #fff7; }
-    .gif-fallback { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 18px; font-weight: 950; letter-spacing: .04em; text-transform: uppercase; text-shadow: 0 1px #fff8; }\n    .badge-emblem { width: 88px; height: 88px; display: grid; place-items: center; border: 1px solid var(--metal-edge); border-radius: 50%; color: var(--badge-accent, var(--metal-bright)); font-family: Georgia, serif; font-size: 53px; font-weight: 900; line-height: 1; text-shadow: 0 1px 0 #fff9, 0 0 20px var(--badge-accent, var(--metal-bright)); box-shadow: inset 0 0 0 5px #ffffff12, 0 0 22px var(--badge-accent, var(--metal-bright)); }
+    .gif-fallback { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 18px; font-weight: 950; letter-spacing: .04em; text-transform: uppercase; text-shadow: 0 1px #fff8; }
+    .badge-emblem { width: 88px; height: 88px; display: grid; place-items: center; border: 1px solid var(--metal-edge); border-radius: 50%; color: var(--badge-accent, var(--metal-bright)); font-family: Georgia, serif; font-size: 53px; font-weight: 900; line-height: 1; text-shadow: 0 1px 0 #fff9, 0 0 20px var(--badge-accent, var(--metal-bright)); box-shadow: inset 0 0 0 5px #ffffff12, 0 0 22px var(--badge-accent, var(--metal-bright)); }
     .mini-ball { width: 76px; height: 76px; display: grid; place-items: center; border: 2px solid #4b2c12; border-radius: 50%; color: #301809; font-size: 26px; background: radial-gradient(circle at 32% 24%, #ffe6a6, #dc7621 62%, #8f3d0c); box-shadow: inset 0 0 0 2px #f9bb48; }
     
     .medal-star { position: absolute; z-index: 2; color: #fffbd2; text-shadow: 0 0 12px #fff, 0 0 24px #fff7b1; animation: twinkle 1.2s ease-in-out infinite alternate; pointer-events: none; }
@@ -81,7 +82,9 @@
     .highlight-panel { margin-top: 14px; padding: 17px; border: 1px solid #ffffff1b; border-radius: 22px; background: linear-gradient(145deg, #111e32, #09111e); box-shadow: 0 16px 45px #0005, inset 0 1px #ffffff0d; }
     .highlight-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
     .highlight-kicker { color: #8795ab; font-size: 9px; font-weight: 800; letter-spacing: .2em; }
-    .highlight-heading h2 { margin: 4px 0 0; color: #f2f5fa; font-size: 16px; letter-spacing: -.02em; }\n    .gif-credit { display: inline-block; margin: -4px 0 12px; color: #92a2bb; font-size: 10px; text-decoration: none; }\n    .gif-credit:hover { color: #fff; text-decoration: underline; }
+    .highlight-heading h2 { margin: 4px 0 0; color: #f2f5fa; font-size: 16px; letter-spacing: -.02em; }
+    .gif-credit { display: inline-block; margin: -4px 0 12px; color: #92a2bb; font-size: 10px; text-decoration: none; }
+    .gif-credit:hover { color: #fff; text-decoration: underline; }
     .play-badge { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--gold); background: #ffc92816; border: 1px solid #ffc92850; font-size: 11px; padding-left: 2px; }
     .media-stage { position: relative; display: grid; place-items: center; overflow: hidden; min-height: 210px; border: 1px solid #ffffff14; border-radius: 15px; background: radial-gradient(ellipse at 50% 40%, #1c3150, #08111d 72%); }
     .media-empty { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 24px; color: #a8b3c5; text-align: center; }
@@ -93,7 +96,11 @@
     .media-stage.has-gif .media-empty { display: none; }
     .footer { text-align: center; color: #718097; font-size: 10px; letter-spacing: .16em; margin-top: 17px; text-transform: uppercase; }
     .card.reveal { animation: reveal .48s cubic-bezier(.2,.8,.2,1); }
-    .card.rarity-common { --metal-glint: #fff; --metal-bright: #edf4f5; --metal-main: #b8c5ca; --metal-mid: #71818a; --metal-deep: #343f48; --metal-rim: #d0dade; --metal-edge: #edf4f5; --metal-glow: #d9eff355; --glow: #aabec9; }\n    .card.rarity-rare { --metal-glint: #edfffb; --metal-bright: #c2f5ef; --metal-main: #62c9c0; --metal-mid: #278b93; --metal-deep: #154957; --metal-rim: #a3f0e6; --metal-edge: #d6fffa; --metal-glow: #63e4d855; --glow: #33c7c1; }\n    .card.rarity-epic { --metal-glint: #fff; --metal-bright: #e1d6ff; --metal-main: #9b87ef; --metal-mid: #5b48bc; --metal-deep: #2d255f; --metal-rim: #c3b5ff; --metal-edge: #e4dcff; --metal-glow: #a492ff77; --glow: #856bff; }\n    .card.rarity-legendary { --metal-glint: #fffde5; --metal-bright: #fff0a6; --metal-main: #efbd37; --metal-mid: #ad7418; --metal-deep: #68400f; --metal-rim: #ffe78a; --metal-edge: #fff2ae; --metal-glow: #ffc92888; --glow: #ffc928; border-color: #ffc92888; }\n    .card.rarity-secret { --metal-glint: #fff1fc; --metal-bright: #ffe0f1; --metal-main: #e98dc1; --metal-mid: #a54886; --metal-deep: #57264f; --metal-rim: #ffb4dc; --metal-edge: #ffe7f5; --metal-glow: #fa78ce99; --glow: #f472b6; }
+    .card.rarity-common { --metal-glint: #fff; --metal-bright: #edf4f5; --metal-main: #b8c5ca; --metal-mid: #71818a; --metal-deep: #343f48; --metal-rim: #d0dade; --metal-edge: #edf4f5; --metal-glow: #d9eff355; --glow: #aabec9; }
+    .card.rarity-rare { --metal-glint: #edfffb; --metal-bright: #c2f5ef; --metal-main: #62c9c0; --metal-mid: #278b93; --metal-deep: #154957; --metal-rim: #a3f0e6; --metal-edge: #d6fffa; --metal-glow: #63e4d855; --glow: #33c7c1; }
+    .card.rarity-epic { --metal-glint: #fff; --metal-bright: #e1d6ff; --metal-main: #9b87ef; --metal-mid: #5b48bc; --metal-deep: #2d255f; --metal-rim: #c3b5ff; --metal-edge: #e4dcff; --metal-glow: #a492ff77; --glow: #856bff; }
+    .card.rarity-legendary { --metal-glint: #fffde5; --metal-bright: #fff0a6; --metal-main: #efbd37; --metal-mid: #ad7418; --metal-deep: #68400f; --metal-rim: #ffe78a; --metal-edge: #fff2ae; --metal-glow: #ffc92888; --glow: #ffc928; border-color: #ffc92888; }
+    .card.rarity-secret { --metal-glint: #fff1fc; --metal-bright: #ffe0f1; --metal-main: #e98dc1; --metal-mid: #a54886; --metal-deep: #57264f; --metal-rim: #ffb4dc; --metal-edge: #ffe7f5; --metal-glow: #fa78ce99; --glow: #f472b6; }
     .card.friendship { --glow: #f472b6; border-color: #f472b688; }
     .card.friendship .badge { color: #f9a8d4; border-color: #f472b688; }
     .card.friendship .ball { background: radial-gradient(circle at 32% 24%, #fbcfe8, #f472b6 55%, #9d174d); color: #fff; }
@@ -136,6 +143,7 @@
         <div><span class="highlight-kicker">THE HIGHLIGHT</span><h2 id="mediaTitle">A moment, on replay</h2></div>
         <span class="play-badge" aria-hidden="true">▶</span>
       </div>
+      <a class="gif-credit" id="gifCredit" target="_blank" rel="noopener noreferrer">GIF source</a>
       <div class="media-stage" id="mediaStage">
         <div class="media-empty" id="mediaEmpty">
           <span class="media-play">▶</span>
@@ -287,7 +295,10 @@
         lastIndex = index;
         if (item.level >= 4) card.classList.add("legendary");
       }
-      card.classList.add("rarity-" + item.rarity.toLowerCase());\n      medal.style.setProperty("--badge-accent", item.accent || "#fff3b0");\n      document.getElementById("badgeEmblem").textContent = item.emblem || "✦";\n      document.getElementById("cardNumber").textContent = friendship ? "SECRET DROP · 1 OF 1" : "CURRY MOMENT · " + String(index + 1).padStart(2, "0");
+      card.classList.add("rarity-" + item.rarity.toLowerCase());
+      medal.style.setProperty("--badge-accent", item.accent || "#fff3b0");
+      document.getElementById("badgeEmblem").textContent = item.emblem || "✦";
+      document.getElementById("cardNumber").textContent = friendship ? "SECRET DROP · 1 OF 1" : "CURRY MOMENT · " + String(index + 1).padStart(2, "0");
       document.getElementById("rarity").textContent = item.rarity;
       document.getElementById("headline").textContent = item.title;
       document.getElementById("subhead").textContent = item.sub;
@@ -296,10 +307,14 @@
       document.getElementById("backKeyword").textContent = item.word;
       document.getElementById("mediaTitle").textContent = item.title;
       document.getElementById("mediaHint").textContent = item.gifUrl
-        ? item.sub + " · PLAYING HIGHLIGHT"
-        : "GIF not attached yet — add a gifUrl to this moment to play it here.";
+        ? item.sub + " · GIF SELECTED FOR THIS MOMENT"
+        : "A highlight GIF will appear here.";
+      const credit = document.getElementById("gifCredit");
+      credit.textContent = item.gifBy ? "GIF: " + item.gifBy + " ↗" : "";
+      if (item.gifPage) { credit.href = item.gifPage; credit.hidden = false; } else { credit.removeAttribute("href"); credit.hidden = true; }
       const gif = document.getElementById("momentGif");
       const mediaStage = document.getElementById("mediaStage");
+      gif.alt = item.title + " — Curry highlight GIF";
       if (item.gifUrl) { gif.src = item.gifUrl; mediaStage.classList.add("has-gif"); }
       else { gif.removeAttribute("src"); mediaStage.classList.remove("has-gif"); }
       spinMedalOnce();
