@@ -17,7 +17,7 @@ For a user or organization repository, enable Pages in **Settings → Pages** an
 ## Notes
 
 - The card selection and seen-card list are stored in the browser's local storage.
-- The badge is a CSS-built, two-sided medallion. Each draw spins it through 360° with a moving shine and twinkling highlights; reduced-motion preferences are respected.
+- The badge is a CSS-built, two-sided medallion. Each draw spins it once through 360° and stops; drag it horizontally with a mouse or touch to rotate it with momentum. The spin uses one axis so the start and end angles line up cleanly. Reduced-motion preferences are respected.
 - A moment can show a GIF on the front by adding a `gifUrl` field to its object in `index.html`. The current moments use the animated medal fallback because no GIF assets were included with the source files.
 - The highlight cards are short captions rather than embedded broadcast footage. Add appropriately licensed media if you want animated clips.
 - The friendship card copy can be personalized whenever the trip details are final.
