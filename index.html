@@ -35,7 +35,7 @@
     }
     .card::before, .card::after { content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%; }
     .card::before { width: 330px; height: 330px; top: 106px; left: 50%; transform: translateX(-50%); border: 1px solid #ffffff13; box-shadow: 0 0 0 26px #ffffff05, 0 0 0 54px #ffffff03; }
-    .card::after { width: 250px; height: 250px; top: 148px; left: 50%; transform: translateX(-50%); background: radial-gradient(circle, var(--glow, #2d75e8)33 0%, transparent 68%); opacity: .2; filter: blur(15px); }
+    .card::after { width: 250px; height: 250px; top: 148px; left: 50%; transform: translateX(-50%); background: radial-gradient(circle, var(--glow, #2d75e8) 0%, transparent 68%); opacity: .2; filter: blur(15px); }
     .topline { display: flex; align-items: center; justify-content: space-between; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
     .badge { color: var(--gold); border: 1px solid #ffc92866; border-radius: 99px; padding: 7px 10px; font-weight: 800; }
     .art { position: relative; display: grid; place-items: center; height: 270px; margin: 26px 0 18px; }
@@ -102,10 +102,6 @@
       try { return JSON.parse(localStorage.getItem(keys[0]) || "[]"); } catch (_) { return []; }
     }
     function saveSeen(value) { try { localStorage.setItem(keys[0], JSON.stringify(value)); } catch (_) {} }
-    function choose(items, lastIndex) {
-      const available = items.map((_, i) => i).filter(i => i !== lastIndex);
-      return available[Math.floor(Math.random() * available.length)];
-    }
     let lastIndex = -1;
     function draw() {
       card.classList.remove("legendary", "friendship", "reveal");
