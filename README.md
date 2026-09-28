@@ -18,6 +18,6 @@ For a user or organization repository, enable Pages in **Settings → Pages** an
 
 - The card selection and seen-card list are stored in the browser's local storage.
 - The badge is a CSS-built, two-sided metal medallion. Each draw spins it once through 360° and stops; drag horizontally with a mouse or touch to turn it on a fixed axis with momentum. The badge shows the highlight keyword, while its GIF appears in a separate panel below the card. Reduced-motion preferences are respected.
-- Add a `gifUrl` field to a moment object in `index.html` to show its GIF in the panel below the card. No GIF assets are currently included.
-- The highlight cards are short captions rather than embedded broadcast footage. Add appropriately licensed media if you want animated clips.
+- Each moment has a distinct GIPHY GIF, a matching badge emblem and keyword, and a source credit link below the highlight title. The badge metal finish changes with rarity: steel for Common, teal silver for Rare, violet for Epic, gold for Legendary, and rose for the 1-in-30 secret card. GIFs stream from their GIPHY pages; the repository does not redistribute the media files.
+- GIF source pages are linked in the site for credit and context. Most clips are illustrative Curry or Warriors reactions rather than verified footage of the specific historical play named on the card; the Paris Olympics and Night Night GIFs are the directly themed exceptions.
 - The friendship card copy can be personalized whenever the trip details are final.
