@@ -191,7 +191,9 @@
       medal.classList.remove("in-motion");
     }
     function spinMedalOnce() {
+      if (autoFrame !== null) cancelAnimationFrame(autoFrame);
       if (inertiaFrame !== null) cancelAnimationFrame(inertiaFrame);
+      autoFrame = null;
       inertiaFrame = null;
       medal.classList.add("in-motion");
       const start = medalRotation;
