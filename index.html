@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="A little Curry Moment card machine. Tap to reveal a different Steph Curry highlight.">
+  <title>Curry Moment — Tap to reveal</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --navy: #07111f;
+      --panel: #101d31;
+      --gold: #ffc928;
+      --blue: #2d75e8;
+      --white: #f6f7fb;
+      --muted: #a8b3c5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100svh; display: grid; place-items: center;
+      padding: 28px 18px; color: var(--white);
+      background: radial-gradient(ellipse at 50% 5%, #17345b 0, var(--navy) 48%, #03070d 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .shell { width: min(100%, 460px); }
+    .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; letter-spacing: .24em; font-weight: 850; font-size: 12px; color: #dbe6f7; }
+    .brand-mark { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #ffffff55; border-radius: 50%; color: var(--gold); font-size: 12px; letter-spacing: 0; }
+    .card {
+      position: relative; isolation: isolate; overflow: hidden; min-height: 590px;
+      display: flex; flex-direction: column; padding: 22px;
+      border: 1px solid #ffffff20; border-radius: 26px;
+      background: linear-gradient(155deg, #142643 0%, #0b1525 58%, #101a2a 100%);
+      box-shadow: 0 24px 80px #0009, inset 0 1px #ffffff12;
+    }
+    .card::before, .card::after { content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%; }
+    .card::before { width: 330px; height: 330px; top: 106px; left: 50%; transform: translateX(-50%); border: 1px solid #ffffff13; box-shadow: 0 0 0 26px #ffffff05, 0 0 0 54px #ffffff03; }
+    .card::after { width: 250px; height: 250px; top: 148px; left: 50%; transform: translateX(-50%); background: radial-gradient(circle, var(--glow, #2d75e8)33 0%, transparent 68%); opacity: .2; filter: blur(15px); }
+    .topline { display: flex; align-items: center; justify-content: space-between; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .badge { color: var(--gold); border: 1px solid #ffc92866; border-radius: 99px; padding: 7px 10px; font-weight: 800; }
+    .art { position: relative; display: grid; place-items: center; height: 270px; margin: 26px 0 18px; }
+    .orbit { position: absolute; width: 220px; height: 220px; border: 1px solid #ffffff26; border-radius: 50%; animation: spin 18s linear infinite; }
+    .orbit::before { content: ""; position: absolute; width: 12px; height: 12px; top: 27px; left: 28px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 24px var(--gold); }
+    .orbit.two { width: 174px; height: 174px; border-style: dashed; opacity: .5; animation-direction: reverse; animation-duration: 26s; }
+    .ball { width: 118px; height: 118px; border-radius: 50%; display: grid; place-items: center; color: #08111d; font-size: 37px; font-weight: 950; background: radial-gradient(circle at 32% 24%, #ffe79a, var(--gold) 48%, #d6810b 100%); box-shadow: 0 0 40px #ffc92855, inset -9px -12px 18px #8a4e1f44; transform: rotate(-10deg); animation: float 3.2s ease-in-out infinite; }
+    .ball span { transform: rotate(10deg); }
+    .art-word { position: absolute; bottom: 8px; color: #ffffff23; font-size: clamp(34px, 10vw, 58px); letter-spacing: -.07em; font-weight: 950; text-transform: uppercase; white-space: nowrap; }
+    .headline { text-align: center; margin: 4px 0 8px; font-size: clamp(27px, 8vw, 38px); line-height: 1.02; letter-spacing: -.045em; text-transform: uppercase; }
+    .subhead { min-height: 24px; text-align: center; color: var(--gold); font-weight: 800; letter-spacing: .06em; font-size: 12px; text-transform: uppercase; }
+    .detail { color: var(--muted); text-align: center; font-size: 13px; line-height: 1.55; margin: 8px auto 18px; max-width: 300px; }
+    .spacer { flex: 1; }
+    button { font: inherit; }
+    .draw { width: 100%; min-height: 54px; border: 0; border-radius: 15px; background: var(--gold); color: #15130d; font-weight: 900; font-size: 15px; letter-spacing: .015em; cursor: pointer; box-shadow: 0 8px 26px #ffc92825; transition: transform .16s ease, filter .16s ease; }
+    .draw:hover { filter: brightness(1.08); transform: translateY(-2px); }
+    .draw:active { transform: scale(.985); }
+    .draw:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+    .footer { text-align: center; color: #718097; font-size: 10px; letter-spacing: .16em; margin-top: 17px; text-transform: uppercase; }
+    .card.reveal { animation: reveal .48s cubic-bezier(.2,.8,.2,1); }
+    .card.legendary { --glow: #ffc928; border-color: #ffc92888; }
+    .card.friendship { --glow: #f472b6; border-color: #f472b688; }
+    .card.friendship .badge { color: #f9a8d4; border-color: #f472b688; }
+    .card.friendship .ball { background: radial-gradient(circle at 32% 24%, #fbcfe8, #f472b6 55%, #9d174d); color: #fff; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes float { 50% { transform: translateY(-8px) rotate(-3deg); } }
+    @keyframes reveal { from { opacity: .55; transform: scale(.97) rotateX(5deg); } to { opacity: 1; transform: scale(1) rotateX(0); } }
+    @media (max-width: 420px) { .card { min-height: min(590px, calc(100svh - 100px)); padding: 18px; } .art { height: 235px; margin: 20px 0 14px; } .orbit { width: 190px; height: 190px; } .orbit.two { width: 150px; height: 150px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="brand"><span class="brand-mark">30</span> CURRY MOMENT</div>
+    <section class="card" id="card" aria-live="polite" aria-atomic="true">
+      <div class="topline"><span id="cardNumber">TAP TO UNLOCK</span><span class="badge" id="rarity">MOMENT CARD</span></div>
+      <div class="art" aria-hidden="true"><div class="orbit"></div><div class="orbit two"></div><div class="ball"><span>30</span></div><div class="art-word" id="artWord">CHEF CURRY</div></div>
+      <h1 class="headline" id="headline">Every tap<br>is a new moment.</h1>
+      <div class="subhead" id="subhead">A little Curry magic</div>
+      <p class="detail" id="detail">Tap below to draw a card from the moment deck. No repeats until the deck resets.</p>
+      <div class="spacer"></div>
+      <button class="draw" id="draw" type="button">🔥 &nbsp; Draw a moment</button>
+    </section>
+    <div class="footer">TROY × CURRY &nbsp;·&nbsp; ONE TAP, ONE MOMENT</div>
+  </main>
+  <script>
+    const moments = [
+      { title: "BANG! BANG!", sub: "OKC · 2016 · OVERTIME", detail: "A 38-foot game winner, followed by a call that became part of basketball history.", rarity: "LEGENDARY", word: "BANG", level: 4 },
+      { title: "NIGHT NIGHT", sub: "NBA FINALS · 2022", detail: "The signature celebration after Curry put the finishing touch on a championship run.", rarity: "EPIC", word: "NIGHT NIGHT", level: 3 },
+      { title: "GAME 4 MASTERCLASS", sub: "NBA FINALS · 2022", detail: "Forty-three points on the road. A defining performance with the series on the line.", rarity: "EPIC", word: "GAME 4", level: 3 },
+      { title: "THE 3-POINT KING", sub: "DECEMBER 2021 · NEW YORK", detail: "A record-breaking three that made Steph the NBA's all-time leader in regular-season threes.", rarity: "LEGENDARY", word: "3,000+", level: 4 },
+      { title: "PARIS TAKEOVER", sub: "OLYMPIC FINAL · 2024", detail: "Four late threes to help close out the gold-medal game. Flurry mode: activated.", rarity: "LEGENDARY", word: "GOLD", level: 4 },
+      { title: "THE NIGHT-NIGHT RUN", sub: "PLAYOFFS · 2022", detail: "One deep shot, one sleepy celebration, and a building that knew what was coming.", rarity: "RARE", word: "SLEEP TIGHT", level: 2 },
+      { title: "LOGO RANGE", sub: "STEPH'S PERSONAL SPACE", detail: "The defense picks him up near half court. That is already too late.", rarity: "RARE", word: "FROM DEEP", level: 2 },
+      { title: "HANDLE PACKAGE", sub: "THE CHEF'S SPECIAL", detail: "A defender reaches, Steph gets loose, and the shot is already on its way.", rarity: "RARE", word: "SAUCE", level: 2 },
+      { title: "WARM-UP MODE", sub: "PRE-GAME ROUTINE", detail: "The shots keep dropping before tip-off. You know the rest of the story.", rarity: "COMMON", word: "NO RIM", level: 1 },
+      { title: "QUICK RELEASE", sub: "CATCH · RISE · SPLASH", detail: "A tiny window, a lightning-fast release, and three points before the closeout arrives.", rarity: "COMMON", word: "SPLASH", level: 1 },
+      { title: "FROM WAY DOWNTOWN", sub: "THREE-POINT LINE? WHAT LINE?", detail: "A reminder that Steph's range starts wherever he decides it does.", rarity: "RARE", word: "WAY DEEP", level: 2 },
+      { title: "CHEF'S KISS", sub: "ONE MORE FOR THE ROAD", detail: "A late-clock three, the turn, the grin. Nothing but net.", rarity: "COMMON", word: "CHEF'S KISS", level: 1 }
+    ];
+    const card = document.getElementById("card");
+    const keys = ["curry-moment-seen-v1"];
+    function getSeen() {
+      try { return JSON.parse(localStorage.getItem(keys[0]) || "[]"); } catch (_) { return []; }
+    }
+    function saveSeen(value) { try { localStorage.setItem(keys[0], JSON.stringify(value)); } catch (_) {} }
+    function choose(items, lastIndex) {
+      const available = items.map((_, i) => i).filter(i => i !== lastIndex);
+      return available[Math.floor(Math.random() * available.length)];
+    }
+    let lastIndex = -1;
+    function draw() {
+      card.classList.remove("legendary", "friendship", "reveal");
+      void card.offsetWidth;
+      const seen = getSeen();
+      const friendship = Math.random() < 1 / 30;
+      let item;
+      let index = -1;
+      if (friendship) {
+        item = { title: "1/1 FRIENDSHIP CARD", sub: "CHENGDU · OCTOBER 2026", detail: "You thought this was a Curry Moment. Surprise — Troy made this one just for you. See you in Chengdu! 😂", rarity: "SECRET", word: "1 OF 1", level: 5 };
+        card.classList.add("friendship");
+      } else {
+        let pool = moments.map((_, i) => i).filter(i => !seen.includes(i));
+        if (!pool.length) { pool = moments.map((_, i) => i); saveSeen([]); }
+        const safePool = pool.length > 1 ? pool.filter(i => i !== lastIndex) : pool;
+        index = safePool[Math.floor(Math.random() * safePool.length)];
+        item = moments[index];
+        seen.push(index);
+        saveSeen(seen);
+        lastIndex = index;
+        if (item.level >= 4) card.classList.add("legendary");
+      }
+      document.getElementById("cardNumber").textContent = friendship ? "SECRET DROP · 1 OF 1" : "CURRY MOMENT · " + String(index + 1).padStart(2, "0");
+      document.getElementById("rarity").textContent = item.rarity;
+      document.getElementById("headline").textContent = item.title;
+      document.getElementById("subhead").textContent = item.sub;
+      document.getElementById("detail").textContent = item.detail;
+      document.getElementById("artWord").textContent = item.word;
+      card.classList.add("reveal");
+      document.getElementById("draw").textContent = "🔥  Another one";
+    }
+    document.getElementById("draw").addEventListener("click", draw);
+  </script>
+</body>
+</html>
